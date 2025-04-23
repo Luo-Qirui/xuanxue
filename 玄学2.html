@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玄学占卜</title>
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+            50% { opacity: 0.6; filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.5)); }
+            100% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+        }
+
+        @keyframes cloudMove {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0a2a 0%, #2a1a3a 100%);
+            position: relative;
+            overflow-x: hidden;
+            font-family: "楷体", "STKaiti", serif;
+            color: #ffffff;
+        }
+
+        /* 复古未来主义背景纹理 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, rgba(224, 208, 255, 0.05) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(224, 208, 255, 0.05) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(224, 208, 255, 0.05) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(224, 208, 255, 0.05) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -3;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+            100% { background-position: 20px 0, 20px 10px, 30px -10px, 10px 0px; }
+        }
+
+        /* 云纹背景 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0wIDAgQzIwIDAgNDAgMjAgNDAgNDAgQzIwIDQwIDAgMjAgMCAwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjI0LCAyMDgsIDI1NSwgMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+');
+            opacity: 0.3;
+            z-index: -2;
+            animation: cloudMove 60s linear infinite;
+        }
+
+        /* 装饰性符文 */
+        .mystic-symbol {
+            position: fixed;
+            font-size: 24px;
+            color: rgba(224, 208, 255, 0.2);
+            pointer-events: none;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .mystic-symbol:nth-child(1) { top: 10%; left: 5%; }
+        .mystic-symbol:nth-child(2) { top: 20%; right: 8%; }
+        .mystic-symbol:nth-child(3) { bottom: 15%; left: 7%; }
+        .mystic-symbol:nth-child(4) { bottom: 25%; right: 6%; }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(26, 10, 42, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.2),
+                0 0 40px rgba(224, 208, 255, 0.1),
+                inset 0 0 20px rgba(224, 208, 255, 0.1);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(224, 208, 255, 0.2);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 45%, rgba(224, 208, 255, 0.1) 50%, transparent 55%),
+                linear-gradient(-45deg, transparent 45%, rgba(224, 208, 255, 0.1) 50%, transparent 55%);
+            background-size: 20px 20px;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        h1 {
+            position: relative;
+            text-align: center;
+            color: #ffffff;
+            font-size: 3em;
+            margin-bottom: 40px;
+            text-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.8),
+                0 0 20px rgba(224, 208, 255, 0.5),
+                0 0 30px rgba(224, 208, 255, 0.3);
+            padding-bottom: 20px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(224, 208, 255, 0.1) 50%, 
+                transparent 100%);
+        }
+
+        h1::before, h1::after {
+            content: '卜';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.5em;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1::before {
+            left: 20px;
+            animation-delay: 0s;
+        }
+
+        h1::after {
+            right: 20px;
+            animation-delay: 1.5s;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.1),
+                inset 0 0 10px rgba(224, 208, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(224, 208, 255, 0.5) 50%, 
+                transparent 100%);
+            animation: border-glow 2s linear infinite;
+        }
+
+        @keyframes border-glow {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(224, 208, 255, 0.3);
+            border-radius: 10px;
+            font-size: 1.1em;
+            background: rgba(26, 10, 42, 0.8);
+            transition: all 0.3s;
+            color: #ffffff;
+            box-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.1),
+                inset 0 0 10px rgba(224, 208, 255, 0.1);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgba(224, 208, 255, 0.8);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.3),
+                inset 0 0 15px rgba(224, 208, 255, 0.2);
+        }
+
+        /* 日历样式 */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-datetime-edit {
+            color: #ffffff;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+            background-color: rgba(26, 10, 42, 0.9);
+        }
+
+        input[type="date"]::-webkit-datetime-edit-text {
+            color: #ffffff;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-month-field {
+            color: #ffffff;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-day-field {
+            color: #ffffff;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-year-field {
+            color: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, 
+                rgba(224, 208, 255, 0.8) 0%, 
+                rgba(224, 208, 255, 0.6) 100%);
+            color: #1a0a2a;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.3),
+                inset 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        #result {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(26, 10, 42, 0.8);
+            border-radius: 20px;
+            border: 2px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.2),
+                inset 0 0 20px rgba(224, 208, 255, 0.1);
+        }
+
+        .divination-progress {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(26, 10, 42, 0.8);
+            border-radius: 20px;
+            border: 2px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.2),
+                inset 0 0 20px rgba(224, 208, 255, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-text {
+            font-size: 1.6em;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.8),
+                0 0 20px rgba(224, 208, 255, 0.5);
+            animation: text-glow 2s ease-in-out infinite;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(26, 10, 42, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                inset 0 0 10px rgba(224, 208, 255, 0.2),
+                0 0 10px rgba(224, 208, 255, 0.1);
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, 
+                rgba(224, 208, 255, 0.2) 0%, 
+                rgba(224, 208, 255, 0.8) 50%, 
+                rgba(224, 208, 255, 0.2) 100%);
+            animation: progress 3s ease-in-out forwards;
+            box-shadow: 0 0 20px rgba(224, 208, 255, 0.5);
+        }
+
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @keyframes text-glow {
+            0% { text-shadow: 0 0 10px rgba(224, 208, 255, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(224, 208, 255, 0.8); }
+            100% { text-shadow: 0 0 10px rgba(224, 208, 255, 0.5); }
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            border-radius: 15px;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.1),
+                inset 0 0 10px rgba(224, 208, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(224, 208, 255, 0.5) 50%, 
+                transparent 100%);
+            animation: border-glow 2s linear infinite;
+        }
+
+        .result-item h3 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            text-shadow: 0 0 10px rgba(224, 208, 255, 0.5);
+            border-bottom: 1px solid rgba(224, 208, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .result-item p {
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(224, 208, 255, 0.3);
+        }
+
+        .blessing {
+            text-align: center;
+            font-size: 1.6em;
+            color: #ffffff;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            border-radius: 15px;
+            font-weight: bold;
+            text-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.8),
+                0 0 20px rgba(224, 208, 255, 0.5);
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.2),
+                inset 0 0 15px rgba(224, 208, 255, 0.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+            .form-group {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 1.2em;
+            }
+        }
+
+        /* 重置按钮样式 */
+        button[type="button"] {
+            background-color: #e0d0ff;
+            margin-top: 15px;
+        }
+
+        button[type="button"]:hover {
+            background-color: #ffffff;
+        }
+
+        .bagua-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) perspective(1000px) rotateX(20deg);
+            width: 80vh;
+            height: 80vh;
+            z-index: -1;
+            opacity: 0.8;
+            pointer-events: none;
+            filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.6));
+        }
+
+        .bagua {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9Imdsb3ciIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEwMCAxQzEwMCA0NSA1NSAxMDAgMSAxMDBDNTUgMTAwIDEwMCAxNTUgMTAwIDE5OUMxMDAgMTU1IDE0NSAxMDAgMTk5IDEwMEMxNDUgMTAwIDEwMCA0NSAxMDAgMVoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxNTAiIHI9IjEwIiBmaWxsPSIjZmZmIi8+PC9zdmc+') center/contain no-repeat;
+            animation: rotate 60s linear infinite, glow 3s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        .bagua-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: rotate-symbols 30s linear infinite;
+            pointer-events: none;
+        }
+
+        .bagua-symbol {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(224, 208, 255, 0.8);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: symbol-glow 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(224, 208, 255, 0.8);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-symbols {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.6; filter: drop-shadow(0 0 20px rgba(224, 208, 255, 0.6)); }
+            50% { opacity: 0.9; filter: drop-shadow(0 0 40px rgba(224, 208, 255, 0.8)); }
+            100% { opacity: 0.6; filter: drop-shadow(0 0 20px rgba(224, 208, 255, 0.6)); }
+        }
+
+        @keyframes symbol-glow {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* 添加媒体查询以确保在较小屏幕上也能正确显示 */
+        @media (max-width: 768px) {
+            .bagua-container {
+                width: 90vw;
+                height: 90vw;
+            }
+        }
+
+        .background-bagua {
+            position: fixed;
+            top: 50%;
+            left: 25%;  /* 调整到左侧 */
+            transform: translate(-50%, -50%) perspective(2000px) rotateX(20deg);
+            width: 70vh;  /* 增大尺寸 */
+            height: 70vh;
+            z-index: -2;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .background-bagua .bagua {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9Imdsb3ciIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEwMCAxQzEwMCA0NSA1NSAxMDAgMSAxMDBDNTUgMTAwIDEwMCAxNTUgMTAwIDE5OUMxMDAgMTU1IDE0NSAxMDAgMTk5IDEwMEMxNDUgMTAwIDEwMCA0NSAxMDAgMVoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxNTAiIHI9IjEwIiBmaWxsPSIjZmZmIi8+PC9zdmc+') center/contain no-repeat;
+            animation: rotate 120s linear infinite;
+            transform-style: preserve-3d;
+            filter: drop-shadow(0 0 20px rgba(224, 208, 255, 0.3));
+        }
+
+        .background-bagua .bagua-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: rotate-symbols 60s linear infinite reverse;
+        }
+
+        .background-bagua .bagua-symbol {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: rgba(224, 208, 255, 0.15);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: symbol-glow 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 15px rgba(224, 208, 255, 0.9);
+            font-family: "楷体", "STKaiti", serif;
+            border: 1px solid rgba(224, 208, 255, 0.3);
+            box-shadow: 0 0 10px rgba(224, 208, 255, 0.2);
+        }
+
+        .background-bagua .bagua-symbol.outer {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            background: rgba(224, 208, 255, 0.2);
+        }
+
+        .background-bagua .bagua-symbol.inner {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            background: rgba(224, 208, 255, 0.1);
+        }
+
+        .background-bagua .taiji {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9Imdsb3ciIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEwMCAxQzEwMCA0NSA1NSAxMDAgMSAxMDBDNTUgMTAwIDEwMCAxNTUgMTAwIDE5OUMxMDAgMTU1IDE0NSAxMDAgMTk5IDEwMEMxNDUgMTAwIDEwMCA0NSAxMDAgMVoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxNTAiIHI9IjEwIiBmaWxsPSIjZmZmIi8+PC9zdmc+') center/contain no-repeat;
+            animation: rotate 120s linear infinite;
+            transform-style: preserve-3d;
+            filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.4));
+        }
+
+        @keyframes background-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes background-symbol-glow {
+            0% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+            100% { opacity: 0.1; transform: scale(1); }
+        }
+
+        /* 添加媒体查询以适应不同屏幕 */
+        @media (max-width: 768px) {
+            .background-bagua {
+                width: 90vw;
+                height: 90vw;
+                left: 30%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-bagua">
+        <div class="bagua"></div>
+        <div class="bagua-symbols"></div>
+    </div>
+    <div class="bagua-container">
+        <div class="bagua"></div>
+        <div class="bagua-symbols"></div>
+    </div>
+    <div class="mystic-border"></div>
+    <div class="mystic-dots" id="mysticDots"></div>
+
+    <!-- 添加装饰性符文 -->
+    <div class="mystic-symbol">卦</div>
+    <div class="mystic-symbol">易</div>
+    <div class="mystic-symbol">命</div>
+    <div class="mystic-symbol">相</div>
+
+    <div class="container">
+        <h1>玄学占卜</h1>
+        <form id="fortuneForm">
+            <div class="form-group">
+                <label for="gender">性别</label>
+                <select id="gender" required>
+                    <option value="">请选择性别</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" required placeholder="请输入您的姓名">
+            </div>
+            <div class="form-group">
+                <label for="birthDate">出生日期</label>
+                <input type="date" id="birthDate" required>
+            </div>
+            <div class="form-group">
+                <label for="birthTime">出生时辰</label>
+                <select id="birthTime" required>
+                    <option value="">请选择时辰</option>
+                    <option value="子时">子时 (23:00-01:00)</option>
+                    <option value="丑时">丑时 (01:00-03:00)</option>
+                    <option value="寅时">寅时 (03:00-05:00)</option>
+                    <option value="卯时">卯时 (05:00-07:00)</option>
+                    <option value="辰时">辰时 (07:00-09:00)</option>
+                    <option value="巳时">巳时 (09:00-11:00)</option>
+                    <option value="午时">午时 (11:00-13:00)</option>
+                    <option value="未时">未时 (13:00-15:00)</option>
+                    <option value="申时">申时 (15:00-17:00)</option>
+                    <option value="酉时">酉时 (17:00-19:00)</option>
+                    <option value="戌时">戌时 (19:00-21:00)</option>
+                    <option value="亥时">亥时 (21:00-23:00)</option>
+                </select>
+            </div>
+            <button type="submit">开始占卜</button>
+        </form>
+
+        <div class="divination-progress">
+            <div class="progress-text">信息分析中……</div>
+            <div class="progress-bar"></div>
+        </div>
+
+        <div id="result">
+            <div class="result-item">
+                <h3>今日穿搭建议</h3>
+                <p id="clothing"></p>
+            </div>
+            <div class="result-item">
+                <h3>首饰搭配</h3>
+                <p id="accessories"></p>
+            </div>
+            <div class="result-item">
+                <h3>包包搭配</h3>
+                <p id="bag"></p>
+            </div>
+            <div class="result-item">
+                <h3>运势分析</h3>
+                <p id="analysis"></p>
+            </div>
+            <div class="result-item">
+                <h3>幸运数字</h3>
+                <p id="luckyNumber"></p>
+            </div>
+            <div class="result-item">
+                <h3>今日宜忌</h3>
+                <p id="dosAndDonts"></p>
+            </div>
+            <div class="blessing">
+                <h3>昃谺日运咒</h3>
+                <p id="blessing"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加动态符文生成
+        function createFloatingSymbols() {
+            const symbols = '卦易命相太阴阳';
+            const container = document.body;
+            
+            setInterval(() => {
+                const symbol = document.createElement('div');
+                symbol.className = 'mystic-symbol';
+                symbol.style.left = Math.random() * 100 + 'vw';
+                symbol.style.top = Math.random() * 100 + 'vh';
+                symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                container.appendChild(symbol);
+                
+                setTimeout(() => {
+                    symbol.remove();
+                }, 5000);
+            }, 2000);
+        }
+
+        // 创建神秘点阵
+        function createMysticDots() {
+            const dotsContainer = document.getElementById('mysticDots');
+            const numberOfDots = 50;
+
+            for (let i = 0; i < numberOfDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'mystic-dot';
+                dot.style.left = Math.random() * 100 + 'vw';
+                dot.style.top = Math.random() * 100 + 'vh';
+                dot.style.animationDelay = Math.random() * 3 + 's';
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // 创建六十四象
+        function createBaguaSymbols() {
+            const container = document.querySelector('.bagua-symbols');
+            const radius = 40; // 符号的分布半径
+            const symbols = '乾兑离震巽坎艮坤';
+            
+            for (let i = 0; i < 64; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'bagua-symbol';
+                const angle = (i / 64) * Math.PI * 2;
+                const x = Math.cos(angle) * radius + 50;
+                const y = Math.sin(angle) * radius + 50;
+                symbol.style.left = `${x}%`;
+                symbol.style.top = `${y}%`;
+                symbol.style.animationDelay = `${i * 0.1}s`;
+                symbol.textContent = symbols[i % 8];
+                container.appendChild(symbol);
+            }
+        }
+
+        // 创建背景八卦符号
+        function createBackgroundBaguaSymbols() {
+            const container = document.querySelector('.background-bagua .bagua-symbols');
+            const outerRadius = 45;  // 外层半径
+            const innerRadius = 30;  // 内层半径
+            const outerSymbols = [
+                '乾', '兑', '离', '震', '巽', '坎', '艮', '坤'
+            ];
+            const innerSymbols = [
+                '天', '泽', '火', '雷', '风', '水', '山', '地'
+            ];
+            
+            // 创建外层八卦（先天八卦顺序）
+            const outerAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+            for (let i = 0; i < 8; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'bagua-symbol outer';
+                const angle = (outerAngles[i] * Math.PI) / 180;
+                const x = Math.cos(angle) * outerRadius + 50;
+                const y = Math.sin(angle) * outerRadius + 50;
+                symbol.style.left = `${x}%`;
+                symbol.style.top = `${y}%`;
+                symbol.style.animationDelay = `${i * 0.5}s`;
+                symbol.textContent = outerSymbols[i];
+                container.appendChild(symbol);
+            }
+            
+            // 创建内层八卦
+            for (let i = 0; i < 8; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'bagua-symbol inner';
+                const angle = (outerAngles[i] * Math.PI) / 180;
+                const x = Math.cos(angle) * innerRadius + 50;
+                const y = Math.sin(angle) * innerRadius + 50;
+                symbol.style.left = `${x}%`;
+                symbol.style.top = `${y}%`;
+                symbol.style.animationDelay = `${i * 0.5 + 0.25}s`;
+                symbol.textContent = innerSymbols[i];
+                container.appendChild(symbol);
+            }
+        }
+
+        // 启动动态效果
+        createFloatingSymbols();
+        createMysticDots();
+        createBaguaSymbols();
+        createBackgroundBaguaSymbols();
+
+        document.getElementById('fortuneForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                gender: document.getElementById('gender').value,
+                name: document.getElementById('name').value,
+                birthDate: document.getElementById('birthDate').value,
+                birthTime: document.getElementById('birthTime').value
+            };
+
+            // 显示进度条
+            document.querySelector('.divination-progress').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+
+            // 3秒后显示结果
+            setTimeout(() => {
+            try {
+                // 生成随机种子
+                const today = new Date();
+                const seed = today.getFullYear() + today.getMonth() + today.getDate() + formData.name.length;
+                
+                // 简单的运势生成逻辑
+                const fortunes = {
+                    analysis: [
+                        "今日运势昌隆，诸事顺遂。贵人相助，财运亨通。建议把握机会，大胆向前。",
+                        "运势平稳，宜静不宜动。适合整理规划，切勿贸然行动。",
+                        "今日吉星高照，适合开展新事业。人际关系融洽，有望收获好消息。",
+                        "运势起伏，需谨慎行事。守成为上，避免冒险。注意身体健康。"
+                    ],
+                    clothing: [
+                            "上装：红色针织衫\n下装：深色牛仔裤",
+                            "上装：蓝色衬衫\n下装：米色休闲裤",
+                            "上装：紫色连衣裙\n下装：黑色打底裤",
+                            "上装：白色T恤\n下装：卡其色长裤"
+                    ],
+                    accessories: [
+                            "金色项链、金色耳环",
+                            "银色手链、银色戒指",
+                            "珍珠耳钉、珍珠手链",
+                            "玉石吊坠、玉石手镯"
+                        ],
+                        bags: [
+                            "红色手提包",
+                            "蓝色单肩包",
+                            "金色链条包",
+                            "米色托特包"
+                    ],
+                    luckyNumbers: ["3, 8", "6, 9", "1, 7", "2, 5"],
+                    dosAndDonts: [
+                        "宜：出行、谈判、签约 忌：争执、借贷",
+                        "宜：居家、学习、养生 忌：远行、搬家",
+                        "宜：投资、表白、结婚 忌：动土、开工",
+                        "宜：收纳、整理、冥想 忌：大额支出"
+                    ],
+                    blessings: [
+                            "天罡北斗，地煞南斗，阴阳相生",
+                            "太初有道，道生一，一生二",
+                            "天玄地黄，宇宙洪荒，日月盈昃",
+                            "乾为天，坤为地，震为雷"
+                    ]
+                };
+
+                // 使用日期和姓名生成索引
+                const index = Math.abs((seed + formData.birthDate.replace(/-/g, '')) % 4);
+
+                const result = {
+                    analysis: fortunes.analysis[index],
+                    clothing: fortunes.clothing[index],
+                    accessories: fortunes.accessories[index],
+                        bag: fortunes.bags[index],
+                    luckyNumber: fortunes.luckyNumbers[index],
+                    dosAndDonts: fortunes.dosAndDonts[index],
+                    blessing: fortunes.blessings[index]
+                };
+
+                document.getElementById('analysis').textContent = result.analysis;
+                    document.getElementById('clothing').textContent = result.clothing;
+                    document.getElementById('accessories').textContent = result.accessories;
+                    document.getElementById('bag').textContent = result.bag;
+                document.getElementById('luckyNumber').textContent = `今日幸运数字：${result.luckyNumber}`;
+                document.getElementById('dosAndDonts').textContent = `今日宜忌：${result.dosAndDonts}`;
+                document.getElementById('blessing').textContent = result.blessing;
+
+                    // 隐藏进度条，显示结果
+                    document.querySelector('.divination-progress').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+            } catch (error) {
+                console.error('发生错误:', error);
+                    document.querySelector('.divination-progress').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('analysis').textContent = '抱歉，生成运势信息时出现错误，请稍后再试。';
+                document.getElementById('clothing').textContent = '';
+                document.getElementById('accessories').textContent = '';
+                    document.getElementById('bag').textContent = '';
+                document.getElementById('luckyNumber').textContent = '';
+                document.getElementById('dosAndDonts').textContent = '';
+                document.getElementById('blessing').textContent = '';
+            }
+            }, 3000);
+        });
+
+        // 添加重置表单的函数
+        function resetForm() {
+            document.getElementById('fortuneForm').reset();
+            document.getElementById('result').style.display = 'none';
+        }
+
+        // 为表单添加重置按钮
+        const resetButton = document.createElement('button');
+        resetButton.type = 'button';
+        resetButton.textContent = '重置';
+        resetButton.style.marginTop = '10px';
+        resetButton.onclick = resetForm;
+        document.getElementById('fortuneForm').appendChild(resetButton);
+    </script>
+</body>
+</html>
+

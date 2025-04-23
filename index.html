@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a0a2a">
+    <meta name="description" content="玄学占卜 - 专业的运势分析平台">
+    <meta name="keywords" content="玄学,占卜,运势,八字,命理">
+    <meta name="author" content="玄学占卜">
+    <meta property="og:title" content="玄学占卜">
+    <meta property="og:description" content="专业的运势分析平台">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com">
+    <title>玄学占卜</title>
+    <!-- 百度统计代码 -->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?your-baidu-tongji-id";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=your-ga-id"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'your-ga-id');
+    </script>
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+            50% { opacity: 0.6; filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.5)); }
+            100% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+        }
+
+        @keyframes cloudMove {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, #1a0a2a 0%, #2a1a3a 100%);
+            position: relative;
+            overflow-x: hidden;
+            font-family: "楷体", "STKaiti", serif;
+            color: #ffffff;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* 简约发光背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(224, 208, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(224, 208, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        /* 复古未来主义背景纹理 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(224, 208, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(224, 208, 255, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(224, 208, 255, 0.05) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(224, 208, 255, 0.05) 25%, transparent 25%);
+            background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+            background-position: 0 0, 0 0, 0 0, 0 10px;
+            z-index: -3;
+            animation: grid-move 20s linear infinite;
+        }
+
+        /* 极繁主义装饰元素 */
+        .mystic-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.1;
+        }
+
+        .mystic-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48ZGVmcz48cGF0dGVybiBpZD0icGF0dGVybiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMCAwIEw0MCAwIEw0MCA0MCBMMCA0MCBMMCAwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjI0LCAyMDgsIDI1NSwgMC4xKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+') center/contain repeat;
+            animation: pattern-rotate 30s linear infinite;
+        }
+
+        /* 左侧八卦阵 */
+        .bagua-container {
+            position: fixed;
+            top: 50%;
+            left: 25%;
+            transform: translate(-50%, -50%) perspective(1000px) rotateX(20deg);
+            width: 60vh;
+            height: 60vh;
+            z-index: -1;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.6));
+        }
+
+        .bagua {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9Imdsb3ciIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwLjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTEwMCAxQzEwMCA0NSA1NSAxMDAgMSAxMDBDNTUgMTAwIDEwMCAxNTUgMTAwIDE5OUMxMDAgMTU1IDE0NSAxMDAgMTk5IDEwMEMxNDUgMTAwIDEwMCA0NSAxMDAgMVoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxNTAiIHI9IjEwIiBmaWxsPSIjZmZmIi8+PC9zdmc+') center/contain no-repeat;
+            animation: rotate 60s linear infinite;
+            transform-style: preserve-3d;
+        }
+
+        .bagua-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: rotate-symbols 30s linear infinite;
+            pointer-events: none;
+        }
+
+        .bagua-symbol {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(224, 208, 255, 0.8);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: symbol-glow 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(224, 208, 255, 0.8);
+            font-family: "楷体", "STKaiti", serif;
+        }
+
+        @keyframes grid-move {
+            0% { background-position: 0 0, 0 0, 0 0, 0 10px; }
+            100% { background-position: 0 0, 0 0, 20px 0, 20px 10px; }
+        }
+
+        @keyframes pattern-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-symbols {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        @keyframes symbol-glow {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .bagua-container {
+                width: 80vw;
+                height: 80vw;
+                left: 30%;
+            }
+        }
+
+        /* 左侧装饰图案 */
+        .left-decoration {
+            position: fixed;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 400px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNDAwIj48cGF0aCBkPSJNMCAyMDAgQzAgMTAwIDEwMCAwIDIwMCAwIEMzMDAgMCA0MDAgMTAwIDQwMCAyMDAgQzQwMCAzMDAgMzAwIDQwMCAyMDAgNDAwIEMxMDAgNDAwIDAgMzAwIDAgMjAwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDIxNSwgMCwgMC41KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTUwIDIwMCBDNTAgMTUwIDEwMCAxMDAgMTUwIDEwMCBDMjAwIDEwMCAyNTAgMTUwIDI1MCAyMDAgQzI1MCAyNTAgMjAwIDMwMCAxNTAgMzAwIEMxMDAgMzAwIDUwIDI1MCA1MCAyMDAgWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjE1LCAwLCAwLjUpIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=') center/contain no-repeat;
+            opacity: 0.3;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        /* 右侧装饰图案 */
+        .right-decoration {
+            position: fixed;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 400px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNDAwIj48cGF0aCBkPSJNMCAyMDAgQzAgMTAwIDEwMCAwIDIwMCAwIEMzMDAgMCA0MDAgMTAwIDQwMCAyMDAgQzQwMCAzMDAgMzAwIDQwMCAyMDAgNDAwIEMxMDAgNDAwIDAgMzAwIDAgMjAwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDIxNSwgMCwgMC41KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTUwIDIwMCBDNTAgMTUwIDEwMCAxMDAgMTUwIDEwMCBDMjAwIDEwMCAyNTAgMTUwIDI1MCAyMDAgQzI1MCAyNTAgMjAwIDMwMCAxNTAgMzAwIEMxMDAgMzAwIDUwIDI1MCA1MCAyMDAgWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjE1LCAwLCAwLjUpIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=') center/contain no-repeat;
+            opacity: 0.3;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        /* 顶部云纹装饰 */
+        .top-cloud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTUwIj48cGF0aCBkPSJNMCA3NSBDMCAyNSAyNSAwIDc1IDAgQzEyNSAwIDE1MCAyNSAxNTAgNzUgQzE1MCAxMjUgMTI1IDE1MCA3NSAxNTAgQzI1IDE1MCAwIDEyNSAwIDc1IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDIxNSwgMCwgMC41KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+') repeat-x;
+            opacity: 0.3;
+            animation: cloud-move 20s linear infinite;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        /* 底部云纹装饰 */
+        .bottom-cloud {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTUwIj48cGF0aCBkPSJNMCA3NSBDMCAyNSAyNSAwIDc1IDAgQzEyNSAwIDE1MCAyNSAxNTAgNzUgQzE1MCAxMjUgMTI1IDE1MCA3NSAxNTAgQzI1IDE1MCAwIDEyNSAwIDc1IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDIxNSwgMCwgMC41KSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+') repeat-x;
+            opacity: 0.3;
+            animation: cloud-move 20s linear infinite reverse;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        @keyframes cloud-move {
+            from { background-position: 0 0; }
+            to { background-position: 200px 0; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .left-decoration,
+            .right-decoration {
+                width: 150px;
+                height: 300px;
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(26, 10, 42, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 30px rgba(224, 208, 255, 0.2);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(224, 208, 255, 0.2);
+        }
+
+        h1 {
+            position: relative;
+            text-align: center;
+            color: #ffffff;
+            font-size: 3em;
+            margin-bottom: 40px;
+            text-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.5);
+            padding-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.1);
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .date-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .date-input-group input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .date-separator {
+            color: rgba(224, 208, 255, 0.8);
+            font-size: 1.1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(224, 208, 255, 0.3);
+            border-radius: 10px;
+            font-size: 1.1em;
+            background: rgba(26, 10, 42, 0.8);
+            color: #ffffff;
+            box-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgba(224, 208, 255, 0.5);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, 
+                rgba(224, 208, 255, 0.8) 0%, 
+                rgba(224, 208, 255, 0.6) 100%);
+            color: #1a0a2a;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.3);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, 
+                rgba(224, 208, 255, 0.9) 0%, 
+                rgba(224, 208, 255, 0.7) 100%);
+            box-shadow: 
+                0 0 30px rgba(224, 208, 255, 0.4);
+        }
+
+        #result {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(26, 10, 42, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 30px rgba(224, 208, 255, 0.2);
+        }
+
+        #loadingPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0a2a 0%, #2a1a3a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        #loadingPage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(224, 208, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(224, 208, 255, 0.1) 0%, transparent 50%);
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+
+        .divination-progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(26, 10, 42, 0.6);
+            border: 1px solid rgba(224, 208, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(224, 208, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-text {
+            font-size: 2.8em;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(224, 208, 255, 0.6);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            font-weight: bold;
+            letter-spacing: 6px;
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+            50% { opacity: 0.6; filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.5)); }
+            100% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(224, 208, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.2),
+                inset 0 0 5px rgba(224, 208, 255, 0.1);
+        }
+
+        .progress-bar-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, 
+                rgba(224, 208, 255, 0.3) 0%, 
+                rgba(224, 208, 255, 0.8) 50%, 
+                rgba(224, 208, 255, 0.3) 100%);
+            animation: progress 3s ease-in-out forwards;
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.4),
+                0 0 40px rgba(224, 208, 255, 0.2);
+        }
+
+        .loading-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .loading-decoration::before,
+        .loading-decoration::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(224, 208, 255, 0.3);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        .loading-decoration::before {
+            top: -100px;
+            left: -100px;
+            animation-duration: 15s;
+        }
+
+        .loading-decoration::after {
+            bottom: -100px;
+            right: -100px;
+            animation-duration: 20s;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes progress {
+            0% { 
+                width: 0;
+                left: 0;
+            }
+            100% { 
+                width: 100%;
+                left: 0;
+            }
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            border-radius: 15px;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 15px rgba(224, 208, 255, 0.1);
+        }
+
+        .result-item h3 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            text-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.5);
+            border-bottom: 1px solid rgba(224, 208, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .result-item p {
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        .blessing {
+            text-align: center;
+            font-size: 1.6em;
+            color: #ffffff;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(26, 10, 42, 0.6);
+            border-radius: 15px;
+            font-weight: bold;
+            border: 1px solid rgba(224, 208, 255, 0.2);
+            box-shadow: 
+                0 0 20px rgba(224, 208, 255, 0.2);
+            text-shadow: 
+                0 0 10px rgba(224, 208, 255, 0.5);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+            .form-group {
+                padding: 15px;
+            }
+
+            .date-input-group {
+                gap: 5px;
+            }
+
+            .date-input-group input {
+                width: 60px;
+                font-size: 1em;
+            }
+
+            .date-separator {
+                font-size: 1em;
+            }
+
+            button {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+
+            .result-item {
+                padding: 15px;
+            }
+
+            .result-item h3 {
+                font-size: 1.2em;
+            }
+
+            .result-item p {
+                font-size: 1em;
+            }
+
+            .progress-text {
+                font-size: 1.4em;
+            }
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            .date-input-group input {
+                width: 50px;
+                padding: 10px;
+            }
+
+            .form-group {
+                padding: 10px;
+            }
+
+            input, select {
+                padding: 12px;
+                font-size: 1em;
+            }
+        }
+
+        /* 防止iOS点击高亮 */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 防止iOS长按菜单 */
+        * {
+            -webkit-touch-callout: none;
+        }
+
+        .developer-info {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(224, 208, 255, 0.6);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(224, 208, 255, 0.1);
+        }
+
+        .developer-info a {
+            color: rgba(224, 208, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .developer-info a:hover {
+            color: rgba(224, 208, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-mountain"></div>
+
+    <div class="container">
+        <div id="loadingPage" style="display: none;">
+            <div class="loading-decoration"></div>
+            <div class="divination-progress">
+                <div class="progress-text">正在测算命理……</div>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="formPage">
+            <h1>玄学占卜</h1>
+            <form id="fortuneForm">
+                <div class="form-group">
+                    <label for="gender">性别</label>
+                    <select id="gender" required>
+                        <option value="">请选择性别</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" required placeholder="请输入您的姓名">
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">出生日期</label>
+                    <div class="date-input-group">
+                        <input type="text" id="birthYear" required placeholder="年" maxlength="4" pattern="\d{4}">
+                        <span class="date-separator">年</span>
+                        <input type="text" id="birthMonth" required placeholder="月" maxlength="2" pattern="\d{1,2}">
+                        <span class="date-separator">月</span>
+                        <input type="text" id="birthDay" required placeholder="日" maxlength="2" pattern="\d{1,2}">
+                        <span class="date-separator">日</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthTime">出生时辰</label>
+                    <select id="birthTime" required>
+                        <option value="">请选择时辰</option>
+                        <option value="子时">子时 (23:00-01:00)</option>
+                        <option value="丑时">丑时 (01:00-03:00)</option>
+                        <option value="寅时">寅时 (03:00-05:00)</option>
+                        <option value="卯时">卯时 (05:00-07:00)</option>
+                        <option value="辰时">辰时 (07:00-09:00)</option>
+                        <option value="巳时">巳时 (09:00-11:00)</option>
+                        <option value="午时">午时 (11:00-13:00)</option>
+                        <option value="未时">未时 (13:00-15:00)</option>
+                        <option value="申时">申时 (15:00-17:00)</option>
+                        <option value="酉时">酉时 (17:00-19:00)</option>
+                        <option value="戌时">戌时 (19:00-21:00)</option>
+                        <option value="亥时">亥时 (21:00-23:00)</option>
+                    </select>
+                </div>
+                <button type="submit">开始占卜</button>
+            </form>
+        </div>
+
+        <div id="result" style="display: none;">
+            <h2>今日运势分析</h2>
+            <div class="result-item">
+                <h3>运势分析</h3>
+                <p id="analysis"></p>
+            </div>
+            <div class="result-item">
+                <h3>今日着装</h3>
+                <p id="clothing"></p>
+            </div>
+            <div class="result-item">
+                <h3>配饰建议</h3>
+                <p id="accessories"></p>
+            </div>
+            <div class="result-item">
+                <h3>包包选择</h3>
+                <p id="bag"></p>
+            </div>
+            <div class="result-item">
+                <h3>幸运数字</h3>
+                <p id="luckyNumber"></p>
+            </div>
+            <div class="result-item">
+                <h3>今日宜忌</h3>
+                <p id="dosAndDonts"></p>
+            </div>
+            <div class="blessing" id="blessing"></div>
+            <button class="back-button">重新占卜</button>
+        </div>
+        
+        <div class="developer-info">
+            开发者：罗小鸟 | 邮箱：<a href="mailto:542872918@qq.com">542872918@qq.com</a>
+        </div>
+    </div>
+
+    <script>
+        // 创建书法字
+        function createCalligraphy() {
+            const container = document.querySelector('.calligraphy-container');
+            if (!container) return;
+            
+            const characters = ['道', '法', '自', '然', '天', '地', '人'];
+            characters.forEach(char => {
+                const calligraphy = document.createElement('div');
+                calligraphy.className = 'calligraphy';
+                calligraphy.textContent = char;
+                container.appendChild(calligraphy);
+            });
+        }
+
+        // 创建八卦符号
+        function createBaguaSymbols() {
+            const container = document.querySelector('.bagua-symbols');
+            if (!container) return;
+            
+            const radius = 40;
+            const symbols = [
+                { char: '\u4DC1', name: '坤' },
+                { char: '\u4DC2', name: '艮' },
+                { char: '\u4DC3', name: '坎' },
+                { char: '\u4DC4', name: '巽' },
+                { char: '\u4DC5', name: '震' },
+                { char: '\u4DC6', name: '离' },
+                { char: '\u4DC7', name: '兑' },
+                { char: '\u4DC0', name: '乾' }
+            ];
+            
+            for (let i = 0; i < 8; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'bagua-symbol';
+                const angle = (i / 8) * Math.PI * 2;
+                const x = Math.cos(angle) * radius + 50;
+                const y = Math.sin(angle) * radius + 50;
+                symbol.style.left = `${x}%`;
+                symbol.style.top = `${y}%`;
+                symbol.style.animationDelay = `${i * 0.1}s`;
+                symbol.textContent = symbols[i].char;
+                symbol.title = `${symbols[i].name}卦 (${i})`;
+                container.appendChild(symbol);
+            }
+        }
+
+        // 启动动态效果
+        document.addEventListener('DOMContentLoaded', function() {
+            createCalligraphy();
+            createBaguaSymbols();
+
+            // 为重新占卜按钮添加事件处理
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    document.getElementById('result').style.display = 'none';
+                    document.getElementById('formPage').style.display = 'block';
+                    document.getElementById('fortuneForm').reset();
+                });
+            }
+
+            const fortuneForm = document.getElementById('fortuneForm');
+            if (fortuneForm) {
+                fortuneForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 隐藏表单页面
+                    document.getElementById('formPage').style.display = 'none';
+                    
+                    // 显示加载页面
+                    const loadingPage = document.getElementById('loadingPage');
+                    loadingPage.style.display = 'block';
+                    
+                    // 确保进度条动画重新开始
+                    const progressBarInner = loadingPage.querySelector('.progress-bar-inner');
+                    if (progressBarInner) {
+                        progressBarInner.style.animation = 'none';
+                        progressBarInner.offsetHeight; // 触发重绘
+                        progressBarInner.style.animation = 'progress 3s ease-in-out forwards';
+                    }
+
+                    const formData = {
+                        gender: document.getElementById('gender').value,
+                        name: document.getElementById('name').value,
+                        birthDate: `${document.getElementById('birthYear').value}-${document.getElementById('birthMonth').value.padStart(2, '0')}-${document.getElementById('birthDay').value.padStart(2, '0')}`,
+                        birthTime: document.getElementById('birthTime').value
+                    };
+
+                    // 模拟加载过程
+                    setTimeout(() => {
+                        try {
+                            // 生成随机种子
+                            const today = new Date();
+                            const seed = today.getFullYear() + today.getMonth() + today.getDate() + formData.name.length;
+                            
+                            // 简单的运势生成逻辑
+                            const fortunes = {
+                                analysis: [
+                                    "今日运势昌隆，诸事顺遂。贵人相助，财运亨通。建议把握机会，大胆向前。",
+                                    "运势平稳，宜静不宜动。适合整理规划，切勿贸然行动。",
+                                    "今日吉星高照，适合开展新事业。人际关系融洽，有望收获好消息。",
+                                    "运势起伏，需谨慎行事。守成为上，避免冒险。注意身体健康。"
+                                ],
+                                clothing: [
+                                    "上装：红色针织衫\n下装：深色牛仔裤",
+                                    "上装：蓝色衬衫\n下装：米色休闲裤",
+                                    "上装：紫色连衣裙\n下装：黑色打底裤",
+                                    "上装：白色T恤\n下装：卡其色长裤"
+                                ],
+                                accessories: [
+                                    "金色项链、金色耳环",
+                                    "银色手链、银色戒指",
+                                    "珍珠耳钉、珍珠手链",
+                                    "玉石吊坠、玉石手镯"
+                                ],
+                                bags: [
+                                    "红色手提包",
+                                    "蓝色单肩包",
+                                    "金色链条包",
+                                    "米色托特包"
+                                ],
+                                luckyNumbers: ["3, 8", "6, 9", "1, 7", "2, 5"],
+                                dosAndDonts: [
+                                    "宜：出行、谈判、签约 忌：争执、借贷",
+                                    "宜：居家、学习、养生 忌：远行、搬家",
+                                    "宜：投资、表白、结婚 忌：动土、开工",
+                                    "宜：收纳、整理、冥想 忌：大额支出"
+                                ],
+                                blessings: [
+                                    "天罡北斗，地煞南斗，阴阳相生",
+                                    "太初有道，道生一，一生二",
+                                    "天玄地黄，宇宙洪荒，日月盈昃",
+                                    "乾为天，坤为地，震为雷"
+                                ]
+                            };
+
+                            // 使用日期和姓名生成索引
+                            const index = Math.abs((seed + formData.birthDate.replace(/-/g, '')) % 4);
+
+                            const result = {
+                                analysis: fortunes.analysis[index],
+                                clothing: fortunes.clothing[index],
+                                accessories: fortunes.accessories[index],
+                                bag: fortunes.bags[index],
+                                luckyNumber: fortunes.luckyNumbers[index],
+                                dosAndDonts: fortunes.dosAndDonts[index],
+                                blessing: fortunes.blessings[index]
+                            };
+
+                            // 更新结果
+                            const elements = {
+                                analysis: document.getElementById('analysis'),
+                                clothing: document.getElementById('clothing'),
+                                accessories: document.getElementById('accessories'),
+                                bag: document.getElementById('bag'),
+                                luckyNumber: document.getElementById('luckyNumber'),
+                                dosAndDonts: document.getElementById('dosAndDonts'),
+                                blessing: document.getElementById('blessing')
+                            };
+
+                            if (elements.analysis) elements.analysis.textContent = result.analysis;
+                            if (elements.clothing) elements.clothing.textContent = result.clothing;
+                            if (elements.accessories) elements.accessories.textContent = result.accessories;
+                            if (elements.bag) elements.bag.textContent = result.bag;
+                            if (elements.luckyNumber) elements.luckyNumber.textContent = `今日幸运数字：${result.luckyNumber}`;
+                            if (elements.dosAndDonts) elements.dosAndDonts.textContent = `今日宜忌：${result.dosAndDonts}`;
+                            if (elements.blessing) elements.blessing.textContent = result.blessing;
+
+                            // 隐藏加载页面，显示结果
+                            loadingPage.style.display = 'none';
+                            const resultDiv = document.getElementById('result');
+                            if (resultDiv) resultDiv.style.display = 'block';
+
+                            // 添加返回按钮（如果还没有的话）
+                            if (!resultDiv.querySelector('.back-button')) {
+                                const backButton = document.createElement('button');
+                                backButton.textContent = '重新占卜';
+                                backButton.className = 'back-button';
+                                backButton.style.marginTop = '20px';
+                                backButton.onclick = function() {
+                                    resultDiv.style.display = 'none';
+                                    document.getElementById('formPage').style.display = 'block';
+                                    fortuneForm.reset();
+                                };
+                                resultDiv.appendChild(backButton);
+                            }
+
+                        } catch (error) {
+                            console.error('发生错误:', error);
+                            loadingPage.style.display = 'none';
+                            const resultDiv = document.getElementById('result');
+                            if (resultDiv) {
+                                resultDiv.style.display = 'block';
+                                const analysis = document.getElementById('analysis');
+                                if (analysis) analysis.textContent = '抱歉，生成运势信息时出现错误，请稍后再试。';
+                            }
+                        }
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
