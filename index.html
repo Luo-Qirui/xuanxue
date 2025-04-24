@@ -402,56 +402,143 @@
                 0 0 30px rgba(224, 208, 255, 0.2);
         }
 
+        #loadingPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0a2a 0%, #2a1a3a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        #loadingPage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(224, 208, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(224, 208, 255, 0.1) 0%, transparent 50%);
+            animation: glow 4s ease-in-out infinite alternate;
+        }
+
         .divination-progress {
-            display: none;
-            margin-top: 40px;
-            padding: 30px;
-            background: rgba(26, 10, 42, 0.8);
-            border-radius: 20px;
-            border: 1px solid rgba(224, 208, 255, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            box-shadow: 
-                0 0 30px rgba(224, 208, 255, 0.2);
+            width: 80%;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(26, 10, 42, 0.6);
+            border: 1px solid rgba(224, 208, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(224, 208, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .progress-text {
-            font-size: 1.6em;
+            font-size: 2.8em;
             color: #ffffff;
-            margin-bottom: 30px;
-            text-shadow: 
-                0 0 10px rgba(224, 208, 255, 0.5);
+            text-shadow: 0 0 15px rgba(224, 208, 255, 0.6);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            font-weight: bold;
+            letter-spacing: 6px;
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
+            50% { opacity: 0.6; filter: drop-shadow(0 0 30px rgba(224, 208, 255, 0.5)); }
+            100% { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(224, 208, 255, 0.3)); }
         }
 
         .progress-bar {
             width: 100%;
-            height: 25px;
-            background: rgba(26, 10, 42, 0.5);
-            border-radius: 15px;
+            height: 8px;
+            background: rgba(224, 208, 255, 0.1);
+            border-radius: 4px;
             overflow: hidden;
             position: relative;
             box-shadow: 
-                inset 0 0 10px rgba(224, 208, 255, 0.2);
+                0 0 10px rgba(224, 208, 255, 0.2),
+                inset 0 0 5px rgba(224, 208, 255, 0.1);
         }
 
-        .progress-bar::before {
-            content: '';
+        .progress-bar-inner {
             position: absolute;
             top: 0;
             left: 0;
             height: 100%;
             width: 0;
             background: linear-gradient(90deg, 
-                rgba(224, 208, 255, 0.2) 0%, 
+                rgba(224, 208, 255, 0.3) 0%, 
                 rgba(224, 208, 255, 0.8) 50%, 
-                rgba(224, 208, 255, 0.2) 100%);
+                rgba(224, 208, 255, 0.3) 100%);
             animation: progress 3s ease-in-out forwards;
             box-shadow: 
-                0 0 20px rgba(224, 208, 255, 0.3);
+                0 0 20px rgba(224, 208, 255, 0.4),
+                0 0 40px rgba(224, 208, 255, 0.2);
+        }
+
+        .loading-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .loading-decoration::before,
+        .loading-decoration::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(224, 208, 255, 0.3);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        .loading-decoration::before {
+            top: -100px;
+            left: -100px;
+            animation-duration: 15s;
+        }
+
+        .loading-decoration::after {
+            bottom: -100px;
+            right: -100px;
+            animation-duration: 20s;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @keyframes progress {
-            0% { width: 0; }
-            100% { width: 100%; }
+            0% { 
+                width: 0;
+                left: 0;
+            }
+            100% { 
+                width: 100%;
+                left: 0;
+            }
         }
 
         .result-item {
@@ -579,79 +666,106 @@
         * {
             -webkit-touch-callout: none;
         }
+
+        .developer-info {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(224, 208, 255, 0.6);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(224, 208, 255, 0.1);
+        }
+
+        .developer-info a {
+            color: rgba(224, 208, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .developer-info a:hover {
+            color: rgba(224, 208, 255, 1);
+        }
     </style>
 </head>
 <body>
     <div class="background-mountain"></div>
 
     <div class="container">
-        <h1>玄学占卜</h1>
-        <form id="fortuneForm">
-            <div class="form-group">
-                <label for="gender">性别</label>
-                <select id="gender" required>
-                    <option value="">请选择性别</option>
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="name">姓名</label>
-                <input type="text" id="name" required placeholder="请输入您的姓名">
-            </div>
-            <div class="form-group">
-                <label for="birthDate">出生日期</label>
-                <div class="date-input-group">
-                    <input type="text" id="birthYear" required placeholder="年" maxlength="4" pattern="\d{4}">
-                    <span class="date-separator">年</span>
-                    <input type="text" id="birthMonth" required placeholder="月" maxlength="2" pattern="\d{1,2}">
-                    <span class="date-separator">月</span>
-                    <input type="text" id="birthDay" required placeholder="日" maxlength="2" pattern="\d{1,2}">
-                    <span class="date-separator">日</span>
+        <div id="loadingPage" style="display: none;">
+            <div class="loading-decoration"></div>
+            <div class="divination-progress">
+                <div class="progress-text">正在测算命理……</div>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner"></div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="birthTime">出生时辰</label>
-                <select id="birthTime" required>
-                    <option value="">请选择时辰</option>
-                    <option value="子时">子时 (23:00-01:00)</option>
-                    <option value="丑时">丑时 (01:00-03:00)</option>
-                    <option value="寅时">寅时 (03:00-05:00)</option>
-                    <option value="卯时">卯时 (05:00-07:00)</option>
-                    <option value="辰时">辰时 (07:00-09:00)</option>
-                    <option value="巳时">巳时 (09:00-11:00)</option>
-                    <option value="午时">午时 (11:00-13:00)</option>
-                    <option value="未时">未时 (13:00-15:00)</option>
-                    <option value="申时">申时 (15:00-17:00)</option>
-                    <option value="酉时">酉时 (17:00-19:00)</option>
-                    <option value="戌时">戌时 (19:00-21:00)</option>
-                    <option value="亥时">亥时 (21:00-23:00)</option>
-                </select>
-            </div>
-            <button type="submit">开始占卜</button>
-        </form>
-
-        <div class="divination-progress">
-            <div class="progress-text">信息分析中……</div>
-            <div class="progress-bar"></div>
         </div>
 
-        <div id="result">
-            <div class="result-item">
-                <h3>今日穿搭建议</h3>
-                <p id="clothing"></p>
-            </div>
-            <div class="result-item">
-                <h3>首饰搭配</h3>
-                <p id="accessories"></p>
-            </div>
-            <div class="result-item">
-                <h3>包包搭配</h3>
-                <p id="bag"></p>
-            </div>
+        <div id="formPage">
+            <h1>玄学占卜</h1>
+            <form id="fortuneForm">
+                <div class="form-group">
+                    <label for="gender">性别</label>
+                    <select id="gender" required>
+                        <option value="">请选择性别</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" required placeholder="请输入您的姓名">
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">出生日期</label>
+                    <div class="date-input-group">
+                        <input type="text" id="birthYear" required placeholder="年" maxlength="4" pattern="\d{4}">
+                        <span class="date-separator">年</span>
+                        <input type="text" id="birthMonth" required placeholder="月" maxlength="2" pattern="\d{1,2}">
+                        <span class="date-separator">月</span>
+                        <input type="text" id="birthDay" required placeholder="日" maxlength="2" pattern="\d{1,2}">
+                        <span class="date-separator">日</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthTime">出生时辰</label>
+                    <select id="birthTime" required>
+                        <option value="">请选择时辰</option>
+                        <option value="子时">子时 (23:00-01:00)</option>
+                        <option value="丑时">丑时 (01:00-03:00)</option>
+                        <option value="寅时">寅时 (03:00-05:00)</option>
+                        <option value="卯时">卯时 (05:00-07:00)</option>
+                        <option value="辰时">辰时 (07:00-09:00)</option>
+                        <option value="巳时">巳时 (09:00-11:00)</option>
+                        <option value="午时">午时 (11:00-13:00)</option>
+                        <option value="未时">未时 (13:00-15:00)</option>
+                        <option value="申时">申时 (15:00-17:00)</option>
+                        <option value="酉时">酉时 (17:00-19:00)</option>
+                        <option value="戌时">戌时 (19:00-21:00)</option>
+                        <option value="亥时">亥时 (21:00-23:00)</option>
+                    </select>
+                </div>
+                <button type="submit">开始占卜</button>
+            </form>
+        </div>
+
+        <div id="result" style="display: none;">
+            <h2>今日运势分析</h2>
             <div class="result-item">
                 <h3>运势分析</h3>
                 <p id="analysis"></p>
+            </div>
+            <div class="result-item">
+                <h3>今日着装</h3>
+                <p id="clothing"></p>
+            </div>
+            <div class="result-item">
+                <h3>配饰建议</h3>
+                <p id="accessories"></p>
+            </div>
+            <div class="result-item">
+                <h3>包包选择</h3>
+                <p id="bag"></p>
             </div>
             <div class="result-item">
                 <h3>幸运数字</h3>
@@ -661,10 +775,12 @@
                 <h3>今日宜忌</h3>
                 <p id="dosAndDonts"></p>
             </div>
-            <div class="blessing">
-                <h3>昃谺日运咒</h3>
-                <p id="blessing"></p>
-            </div>
+            <div class="blessing" id="blessing"></div>
+            <button class="back-button">重新占卜</button>
+        </div>
+        
+        <div class="developer-info">
+            开发者：罗小鸟 | 邮箱：<a href="mailto:542872918@qq.com">542872918@qq.com</a>
         </div>
     </div>
 
@@ -720,11 +836,36 @@
             createCalligraphy();
             createBaguaSymbols();
 
+            // 为重新占卜按钮添加事件处理
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    document.getElementById('result').style.display = 'none';
+                    document.getElementById('formPage').style.display = 'block';
+                    document.getElementById('fortuneForm').reset();
+                });
+            }
+
             const fortuneForm = document.getElementById('fortuneForm');
             if (fortuneForm) {
                 fortuneForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
+                    // 隐藏表单页面
+                    document.getElementById('formPage').style.display = 'none';
+                    
+                    // 显示加载页面
+                    const loadingPage = document.getElementById('loadingPage');
+                    loadingPage.style.display = 'block';
+                    
+                    // 确保进度条动画重新开始
+                    const progressBarInner = loadingPage.querySelector('.progress-bar-inner');
+                    if (progressBarInner) {
+                        progressBarInner.style.animation = 'none';
+                        progressBarInner.offsetHeight; // 触发重绘
+                        progressBarInner.style.animation = 'progress 3s ease-in-out forwards';
+                    }
+
                     const formData = {
                         gender: document.getElementById('gender').value,
                         name: document.getElementById('name').value,
@@ -732,13 +873,7 @@
                         birthTime: document.getElementById('birthTime').value
                     };
 
-                    // 显示进度条
-                    const progressDiv = document.querySelector('.divination-progress');
-                    const resultDiv = document.getElementById('result');
-                    if (progressDiv) progressDiv.style.display = 'block';
-                    if (resultDiv) resultDiv.style.display = 'none';
-
-                    // 3秒后显示结果
+                    // 模拟加载过程
                     setTimeout(() => {
                         try {
                             // 生成随机种子
@@ -818,12 +953,29 @@
                             if (elements.dosAndDonts) elements.dosAndDonts.textContent = `今日宜忌：${result.dosAndDonts}`;
                             if (elements.blessing) elements.blessing.textContent = result.blessing;
 
-                            // 隐藏进度条，显示结果
-                            if (progressDiv) progressDiv.style.display = 'none';
+                            // 隐藏加载页面，显示结果
+                            loadingPage.style.display = 'none';
+                            const resultDiv = document.getElementById('result');
                             if (resultDiv) resultDiv.style.display = 'block';
+
+                            // 添加返回按钮（如果还没有的话）
+                            if (!resultDiv.querySelector('.back-button')) {
+                                const backButton = document.createElement('button');
+                                backButton.textContent = '重新占卜';
+                                backButton.className = 'back-button';
+                                backButton.style.marginTop = '20px';
+                                backButton.onclick = function() {
+                                    resultDiv.style.display = 'none';
+                                    document.getElementById('formPage').style.display = 'block';
+                                    fortuneForm.reset();
+                                };
+                                resultDiv.appendChild(backButton);
+                            }
+
                         } catch (error) {
                             console.error('发生错误:', error);
-                            if (progressDiv) progressDiv.style.display = 'none';
+                            loadingPage.style.display = 'none';
+                            const resultDiv = document.getElementById('result');
                             if (resultDiv) {
                                 resultDiv.style.display = 'block';
                                 const analysis = document.getElementById('analysis');
@@ -834,20 +986,6 @@
                 });
             }
         });
-
-        // 添加重置表单的函数
-        function resetForm() {
-            document.getElementById('fortuneForm').reset();
-            document.getElementById('result').style.display = 'none';
-        }
-
-        // 为表单添加重置按钮
-        const resetButton = document.createElement('button');
-        resetButton.type = 'button';
-        resetButton.textContent = '重置';
-        resetButton.style.marginTop = '10px';
-        resetButton.onclick = resetForm;
-        document.getElementById('fortuneForm').appendChild(resetButton);
     </script>
 </body>
 </html>
